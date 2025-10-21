@@ -1,0 +1,151 @@
+.header {
+  background: var(--background);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    background: rgba(10, 10, 10, 0.9);
+  }
+}
+
+.nav {
+  padding: 1rem 0;
+}
+
+.navContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logoIcon {
+  font-size: 2rem;
+}
+
+.logoText {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.5rem;
+}
+
+.menuToggle span {
+  width: 24px;
+  height: 3px;
+  background: var(--foreground);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.navLinks {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+
+.navLink {
+  color: var(--foreground);
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.navLink:hover {
+  color: var(--primary-color);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.navLinkCta {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.navLinkCta::after {
+  display: none;
+}
+
+.navLinkCta:hover {
+  background: #1d4ed8;
+  color: white;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .menuToggle {
+    display: flex;
+  }
+
+  .navLinks {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--background);
+    border-bottom: 1px solid var(--border-color);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .navLinksOpen {
+    max-height: 300px;
+    padding: 1rem 0;
+  }
+
+  .navLink {
+    padding: 1rem 1.5rem;
+    width: 100%;
+    display: block;
+  }
+
+  .navLinkCta {
+    margin: 0 1.5rem;
+    text-align: center;
+  }
+}

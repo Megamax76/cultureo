@@ -1,0 +1,164 @@
+.page {
+  min-height: 100vh;
+}
+
+.header {
+  background: var(--gradient);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.header h1 {
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  opacity: 0.95;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  padding: 3rem 0;
+}
+
+/* Sidebar Filters */
+.sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.filterSection {
+  margin-bottom: 2rem;
+}
+
+.filterTitle {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.filterOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--foreground);
+  font-size: 0.9375rem;
+}
+
+.filterButton:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.filterButtonActive {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* Main Content */
+.mainContent {
+  flex: 1;
+}
+
+.resultsHeader {
+  margin-bottom: 2rem;
+}
+
+.resultsCount {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.formationsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.formationCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+.formationHeader {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.formationTitle {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.formationDescription {
+  color: var(--text-secondary);
+  flex-grow: 1;
+  line-height: 1.6;
+}
+
+.formationMeta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.noResults {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.noResults p {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .filterSection {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .formationsGrid {
+    grid-template-columns: 1fr;
+  }
+}
