@@ -1,0 +1,423 @@
+// Rafale Knowledge Bridge - Database Schema
+// Prisma ORM Schema for PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========================================
+// USER MANAGEMENT
+// ========================================
+
+enum UserRole {
+  DASSAULT_ADMIN
+  DASSAULT_USER
+  TATA_ADMIN
+  TATA_USER
+}
+
+enum Country {
+  FR // France
+  IN // India
+}
+
+enum Language {
+  fr
+  en
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  role      UserRole
+  country   Country
+  language  Language @default(en)
+
+  department         String?
+  certificationLevel Int      @default(0) @map("certification_level")
+  avatarUrl          String?  @map("avatar_url")
+  isActive           Boolean  @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  lastLogin DateTime? @map("last_login")
+
+  // Relations
+  documents         Document[]
+  questions         Question[]
+  answers           Question[]        @relation("Answerer")
+  certifications    Certification[]
+  activityLogs      ActivityLog[]
+  nonConformities   NonConformity[]
+  toolChecks        ToolCheck[]
+  createdSkills     Skill[]           @relation("SkillCreator")
+  validatedDocuments Document[]       @relation("DocumentValidator")
+
+  @@map("users")
+}
+
+// ========================================
+// DOCUMENTS & BIBLE
+// ========================================
+
+enum DocumentType {
+  NORM
+  PROCEDURE
+  DATAPACK
+  TECHNICAL_DRAWING
+  SPECIFICATION
+  GUIDE
+  OTHER
+}
+
+enum DocumentStatus {
+  DRAFT
+  REVIEW
+  VALIDATED
+  OBSOLETE
+}
+
+model Document {
+  id          String         @id @default(uuid())
+  code        String         @unique
+  titleFr     String         @map("title_fr")
+  titleEn     String         @map("title_en")
+  descriptionFr String?      @map("description_fr") @db.Text
+  descriptionEn String?      @map("description_en") @db.Text
+
+  type        DocumentType
+  status      DocumentStatus @default(DRAFT)
+  version     String         @default("1.0")
+
+  section     String?        // T34, T56, etc.
+  tags        String[]       @default([])
+
+  fileUrl     String         @map("file_url")
+  thumbnailUrl String?       @map("thumbnail_url")
+  model3dUrl  String?        @map("model_3d_url")
+  fileSize    Int?           @map("file_size") // bytes
+
+  createdById   String       @map("created_by_id")
+  createdBy     User         @relation(fields: [createdById], references: [id])
+
+  validatedById String?      @map("validated_by_id")
+  validatedBy   User?        @relation("DocumentValidator", fields: [validatedById], references: [id])
+  validatedAt   DateTime?    @map("validated_at")
+
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  // Relations
+  skills            Skill[]
+  questions         Question[]
+  activityLogs      ActivityLog[]
+  nonConformities   NonConformity[]
+
+  @@map("documents")
+}
+
+// ========================================
+// SKILLS & TACIT KNOWLEDGE
+// ========================================
+
+enum SkillCategory {
+  ASSEMBLY
+  PROCESS
+  CONTROL
+  REPAIR
+  TOOLING
+}
+
+enum DifficultyLevel {
+  BASIC
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model Skill {
+  id            String          @id @default(uuid())
+  titleFr       String          @map("title_fr")
+  titleEn       String          @map("title_en")
+  descriptionFr String          @map("description_fr") @db.Text
+  descriptionEn String          @map("description_en") @db.Text
+
+  category      SkillCategory
+  difficulty    DifficultyLevel @default(BASIC)
+
+  videoUrl      String          @map("video_url")
+  thumbnailUrl  String?         @map("thumbnail_url")
+  duration      Int             // seconds
+
+  commonErrors    String[]      @default([]) @map("common_errors") // JSON array
+  bestPractices   String[]      @default([]) @map("best_practices") // JSON array
+
+  tags          String[]        @default([])
+  viewCount     Int             @default(0) @map("view_count")
+
+  createdById   String          @map("created_by_id")
+  createdBy     User            @relation("SkillCreator", fields: [createdById], references: [id])
+
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  // Relations
+  documents         Document[]
+  trainingModules   TrainingModule[]
+  questions         Question[]
+  activityLogs      ActivityLog[]
+  nonConformities   NonConformity[]
+
+  @@map("skills")
+}
+
+// ========================================
+// TRAINING & CERTIFICATION
+// ========================================
+
+model TrainingModule {
+  id            String   @id @default(uuid())
+  titleFr       String   @map("title_fr")
+  titleEn       String   @map("title_en")
+  descriptionFr String   @map("description_fr") @db.Text
+  descriptionEn String   @map("description_en") @db.Text
+
+  level         Int      // 1-4
+  estimatedDuration Int  @map("estimated_duration") // minutes
+
+  content       Json     // Structure: { steps: [], quizzes: [], media: [] }
+  prerequisites String[] @default([]) // IDs of prerequisite modules
+
+  passingScore  Int      @default(80) @map("passing_score") // percentage
+
+  isActive      Boolean  @default(true) @map("is_active")
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  skills          Skill[]
+  certifications  Certification[]
+  activityLogs    ActivityLog[]
+
+  @@map("training_modules")
+}
+
+enum CertificationStatus {
+  PENDING
+  PASSED
+  FAILED
+}
+
+model Certification {
+  id              String               @id @default(uuid())
+  userId          String               @map("user_id")
+  user            User                 @relation(fields: [userId], references: [id])
+
+  moduleId        String               @map("module_id")
+  module          TrainingModule       @relation(fields: [moduleId], references: [id])
+
+  score           Int
+  status          CertificationStatus
+  attempts        Int                  @default(1)
+
+  answers         Json?                // Store quiz answers
+  certificateUrl  String?              @map("certificate_url")
+
+  startedAt       DateTime             @default(now()) @map("started_at")
+  completedAt     DateTime?            @map("completed_at")
+  expiresAt       DateTime?            @map("expires_at")
+
+  @@unique([userId, moduleId])
+  @@map("certifications")
+}
+
+// ========================================
+// TOOLS & OUTILLAGES
+// ========================================
+
+enum ToolStatus {
+  IN_FR        // In France
+  TRANSFERRED  // In transit
+  IN_IN        // In India
+  VALIDATED    // Validated in India
+  REJECTED     // Failed validation
+}
+
+model Tool {
+  id              String     @id @default(uuid())
+  name            String
+  code            String     @unique
+  descriptionFr   String     @map("description_fr") @db.Text
+  descriptionEn   String     @map("description_en") @db.Text
+
+  model3dUrl      String?    @map("model_3d_url")
+  calibrationProc String?    @map("calibration_procedure") @db.Text
+  photos          String[]   @default([])
+
+  locationFr      String?    @map("location_fr")
+  locationIn      String?    @map("location_in")
+
+  status          ToolStatus @default(IN_FR)
+
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  checks          ToolCheck[]
+
+  @@map("tools")
+}
+
+model ToolCheck {
+  id          String   @id @default(uuid())
+  toolId      String   @map("tool_id")
+  tool        Tool     @relation(fields: [toolId], references: [id])
+
+  checkedById String   @map("checked_by_id")
+  checkedBy   User     @relation(fields: [checkedById], references: [id])
+
+  photos      String[] @default([])
+  notes       String?  @db.Text
+  qrCode      String?  @map("qr_code")
+
+  isValid     Boolean  @map("is_valid")
+
+  checkedAt   DateTime @default(now()) @map("checked_at")
+
+  @@map("tool_checks")
+}
+
+// ========================================
+// QUALITY & NON-CONFORMITIES
+// ========================================
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RNCStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model NonConformity {
+  id          String    @id @default(uuid())
+  reference   String    @unique
+  title       String
+  description String    @db.Text
+
+  severity    Severity  @default(MEDIUM)
+  status      RNCStatus @default(OPEN)
+
+  section     String?
+
+  detectedById String   @map("detected_by_id")
+  detectedBy   User     @relation(fields: [detectedById], references: [id])
+
+  documentId   String?  @map("document_id")
+  document     Document? @relation(fields: [documentId], references: [id])
+
+  skillId      String?  @map("skill_id")
+  skill        Skill?   @relation(fields: [skillId], references: [id])
+
+  rootCause        String? @map("root_cause") @db.Text
+  correctiveAction String? @map("corrective_action") @db.Text
+
+  detectedAt  DateTime  @default(now()) @map("detected_at")
+  resolvedAt  DateTime? @map("resolved_at")
+
+  @@map("non_conformities")
+}
+
+// ========================================
+// QUESTIONS & ANSWERS
+// ========================================
+
+enum QuestionStatus {
+  PENDING
+  ANSWERED
+  VALIDATED
+}
+
+model Question {
+  id           String         @id @default(uuid())
+  questionText String         @map("question_text") @db.Text
+  answerText   String?        @map("answer_text") @db.Text
+
+  status       QuestionStatus @default(PENDING)
+  isPublic     Boolean        @default(false) @map("is_public")
+  votes        Int            @default(0)
+
+  authorId     String         @map("author_id")
+  author       User           @relation(fields: [authorId], references: [id])
+
+  answeredById String?        @map("answered_by_id")
+  answeredBy   User?          @relation("Answerer", fields: [answeredById], references: [id])
+  answeredAt   DateTime?      @map("answered_at")
+
+  documentId   String?        @map("document_id")
+  document     Document?      @relation(fields: [documentId], references: [id])
+
+  skillId      String?        @map("skill_id")
+  skill        Skill?         @relation(fields: [skillId], references: [id])
+
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("questions")
+}
+
+// ========================================
+// ACTIVITY LOGS & ANALYTICS
+// ========================================
+
+enum ActivityAction {
+  VIEW
+  DOWNLOAD
+  COMPLETE
+  SEARCH
+  UPLOAD
+  EDIT
+  DELETE
+}
+
+model ActivityLog {
+  id           String         @id @default(uuid())
+  userId       String         @map("user_id")
+  user         User           @relation(fields: [userId], references: [id])
+
+  action       ActivityAction
+  resourceType String         @map("resource_type") // document, skill, training, etc.
+  resourceId   String?        @map("resource_id")
+
+  documentId   String?        @map("document_id")
+  document     Document?      @relation(fields: [documentId], references: [id])
+
+  skillId      String?        @map("skill_id")
+  skill        Skill?         @relation(fields: [skillId], references: [id])
+
+  moduleId     String?        @map("module_id")
+  module       TrainingModule? @relation(fields: [moduleId], references: [id])
+
+  metadata     Json?          // Additional context data
+
+  createdAt    DateTime       @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@index([action, resourceType])
+  @@map("activity_logs")
+}
