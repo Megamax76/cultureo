@@ -1,34 +1,39 @@
 # Métadonnées du Manuscrit
 
 # Informations de Base
-title: "Titre du Livre"
-subtitle: "Sous-titre (optionnel)"
-author: "Nom de l'Auteur"
-author_bio: "Courte biographie de l'auteur"
+title: "Vibe Coding"
+subtitle: "Le Manifeste de la Création Numérique par l'Intention"
+author: "À définir"
+author_bio: "Créateur et entrepreneur tech de 35 ans, passionné par la démocratisation de la technologie et l'innovation accessible à tous."
 
 # Publication
-publisher: ""
-publication_date: ""
+publisher: "Auto-édition Amazon KDP"
+publication_date: "2025-Q2"
 edition: "1"
 isbn: ""
 isbn_13: ""
 
 # Classification
 genre: "Essai / Non-fiction"
-category: "Catégorie principale"
-subcategory: "Sous-catégorie"
+category: "Technologie et Innovation"
+subcategory: "Intelligence Artificielle / Programmation / Entrepreneuriat"
 subject_keywords:
-  - keyword1
-  - keyword2
-  - keyword3
-  - keyword4
-  - keyword5
+  - intelligence artificielle
+  - vibe coding
+  - programmation
+  - no-code
+  - entrepreneuriat
+  - démocratisation technologique
+  - créativité numérique
+  - IA générative
+  - futur du travail
+  - révolution digitale
 
 # Contenu
 language: "fr"
 word_count: 0
 page_count: 0
-chapter_count: 12
+chapter_count: 15
 
 # Droits
 copyright_year: "YYYY"
@@ -49,26 +54,47 @@ author_social:
   linkedin: ""
 
 # Marketing
-tagline: "Une phrase accrocheuse qui résume le livre"
+tagline: "Et si créer une app était aussi simple que d'avoir une idée ?"
 elevator_pitch: |
-  Résumé du livre en 2-3 phrases pour pitch rapide.
-  Qu'est-ce que le livre apporte? Pourquoi le lire?
+  L'année 2025 marque une révolution : le "Vibe Coding" permet à n'importe qui de créer
+  des logiciels en utilisant simplement le langage naturel. Plus besoin de maîtriser Python
+  ou JavaScript - il suffit de savoir formuler une intention. Ce livre est le guide pour
+  comprendre cette rupture technologique et en profiter dès maintenant.
 
 back_cover_text: |
-  Texte de quatrième de couverture (150-200 mots).
+  Imaginez : vous avez une idée d'application. Quelques phrases plus tard, elle existe.
 
-  Doit captiver, informer, et inciter à l'achat.
+  Le "Vibe Coding" n'est pas de la science-fiction, c'est la réalité de 2025. Grâce aux
+  modèles d'IA comme Claude et GPT-4, des comptables créent leurs propres outils, des
+  entrepreneurs non-techniques lancent des startups, et la barrière entre l'imagination
+  et l'exécution s'effondre.
 
-target_audience: "Description du public cible"
+  Dans ce livre, vous découvrirez comment cette révolution fonctionne, quels outils
+  utiliser, comment devenir une "licorne unipersonnelle", et pourquoi cette compétence
+  sera indispensable dans l'économie de demain.
+
+  Rigoureux mais accessible, inspirant mais pragmatique, ce manifeste est votre passeport
+  pour l'ère de la création sans limites.
+
+target_audience: |
+  - Entrepreneurs et créateurs qui veulent concrétiser leurs idées sans équipe technique
+  - Professionnels non-tech curieux d'automatiser leur travail
+  - Développeurs qui veulent comprendre le futur de leur métier
+  - Étudiants et jeunes actifs voulant acquérir une compétence d'avenir
+  - Curieux de tech qui veulent comprendre la révolution IA sans jargon
 
 comparable_titles:
-  - title: "Livre similaire 1"
-    author: "Auteur"
-    why: "En quoi c'est comparable"
+  - title: "Homo Deus"
+    author: "Yuval Noah Harari"
+    why: "Pour l'analyse sociologique et la vision du futur"
 
-  - title: "Livre similaire 2"
-    author: "Auteur"
-    why: "En quoi c'est comparable"
+  - title: "The Coming Wave"
+    author: "Mustafa Suleyman"
+    why: "Pour l'impact de l'IA par un acteur de premier plan"
+
+  - title: "Zero to One"
+    author: "Peter Thiel"
+    why: "Pour l'aspect entrepreneurial et innovation"
 
 # Technique
 format: "markdown"
