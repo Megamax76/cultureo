@@ -1,0 +1,83 @@
+# Métadonnées du Manuscrit
+
+# Informations de Base
+title: "Titre du Livre"
+subtitle: "Sous-titre (optionnel)"
+author: "Nom de l'Auteur"
+author_bio: "Courte biographie de l'auteur"
+
+# Publication
+publisher: ""
+publication_date: ""
+edition: "1"
+isbn: ""
+isbn_13: ""
+
+# Classification
+genre: "Essai / Non-fiction"
+category: "Catégorie principale"
+subcategory: "Sous-catégorie"
+subject_keywords:
+  - keyword1
+  - keyword2
+  - keyword3
+  - keyword4
+  - keyword5
+
+# Contenu
+language: "fr"
+word_count: 0
+page_count: 0
+chapter_count: 12
+
+# Droits
+copyright_year: "YYYY"
+copyright_holder: "Nom"
+rights: "All Rights Reserved"
+license: ""
+
+# Versions
+version: "1.0"
+status: "draft"  # draft, review, final
+last_updated: "YYYY-MM-DD"
+
+# Contact
+author_email: ""
+author_website: ""
+author_social:
+  twitter: ""
+  linkedin: ""
+
+# Marketing
+tagline: "Une phrase accrocheuse qui résume le livre"
+elevator_pitch: |
+  Résumé du livre en 2-3 phrases pour pitch rapide.
+  Qu'est-ce que le livre apporte? Pourquoi le lire?
+
+back_cover_text: |
+  Texte de quatrième de couverture (150-200 mots).
+
+  Doit captiver, informer, et inciter à l'achat.
+
+target_audience: "Description du public cible"
+
+comparable_titles:
+  - title: "Livre similaire 1"
+    author: "Auteur"
+    why: "En quoi c'est comparable"
+
+  - title: "Livre similaire 2"
+    author: "Auteur"
+    why: "En quoi c'est comparable"
+
+# Technique
+format: "markdown"
+compilation_script: ""
+output_formats:
+  - pdf
+  - epub
+  - mobi
+
+# Notes
+notes: |
+  Notes additionnelles sur le manuscrit.
